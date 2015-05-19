@@ -59,7 +59,11 @@ public class MessageUtil {
 		xstream.alias("xml", textmessage.getClass());
 		return xstream.toXML(textmessage);
 	}
-	
+	/**
+	 * 获取回复给腾讯的xml报文
+	 * @param reqm 腾讯发送过来的map格式报文
+	 * @return
+	 */
 	public static String getReplayXML(Map<String, String> reqm){
 		logger.info("返回消息String获取开始-----------------");
 		String replayMessage = null;
@@ -72,6 +76,9 @@ public class MessageUtil {
 			TextMessage txmsg = (TextMessage) msgb;
 			replayMessage = textMessageToXML(txmsg);
 			logger.info("文字消息返回：\n"+replayMessage);
+			break;
+		case Dict.MsgType_LINK:
+			logger.info("返回的消息类型是链接消息");
 			break;
 		default:
 			break;

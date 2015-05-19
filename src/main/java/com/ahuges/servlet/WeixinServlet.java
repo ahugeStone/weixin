@@ -31,10 +31,10 @@ public class WeixinServlet extends HttpServlet {
 		String timestamp = req.getParameter("timestamp");
 		String nonce = req.getParameter("nonce");
 		String echostr = req.getParameter("echostr");
-		logger.info("signature:"+signature);
-		logger.info("timestamp:"+timestamp);
-		logger.info("nonce:"+nonce);
-		logger.info("echostr:"+echostr);
+		logger.debug("signature:"+signature);
+		logger.debug("timestamp:"+timestamp);
+		logger.debug("nonce:"+nonce);
+		logger.debug("echostr:"+echostr);
 		PrintWriter out = resp.getWriter();
 		try{
 			if(CheckUtil.checkSignature(signature, timestamp, nonce)){
@@ -44,6 +44,7 @@ public class WeixinServlet extends HttpServlet {
 				logger.info("握手失败-----------");
 			}
 		}catch(Exception e){
+			logger.error("握手异常");
 			e.printStackTrace();
 		}finally{
 			out.close();
@@ -54,7 +55,7 @@ public class WeixinServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		logger.info("******servlet开始******");
+		logger.info("******doPost开始******");
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		try {
@@ -63,9 +64,10 @@ public class WeixinServlet extends HttpServlet {
 			//回复消息
 			SendUtil.send(resp, MessageUtil.getReplayXML(reqm));
 		} catch (DocumentException e) {
+			logger.error("doPost异常");
 			e.printStackTrace();
 		}finally{
-			logger.info("******servlet结束******");
+			logger.info("******doPost结束******");
 		}
 	}
 }
